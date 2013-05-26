@@ -55,7 +55,6 @@ class VpnMonitor(object):
   def main_loop(self):
     while True:
       if not self.is_vpn_connected():
-
         logging.info("VPN %s is disconnected", self.vpn_name)
         self.quit_apps()
 
