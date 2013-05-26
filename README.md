@@ -11,5 +11,5 @@ Usage
 -----
 
 ```bash
-python vpn-monitor.py
+python vpn-monitor.py --vpn IPredator --apps uTorrent,Transmission
 ```
