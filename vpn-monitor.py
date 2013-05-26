@@ -11,12 +11,12 @@ Options:
   --vpn=<vpn>   Name of vpn
   --apps=<apps> Name of apps that may run iff the vpn is running.
 """
-from docopt import docopt
 
 from time import sleep
 from subprocess import check_output
 
 from appscript import app
+from docopt import docopt
 
 class VpnMonitor(object):
   def __init__(self, vpn, apps):
