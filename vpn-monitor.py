@@ -8,8 +8,8 @@ Usage:
 Options:
   -h --help     Show this screen.
   --version     Show version.
-  --vpn=<vpn>   Name of vpn
-  --apps=<apps> Name of apps that may run iff the vpn is running.
+  --vpn=<vpn>   Name of VPN.
+  --apps=<apps> Comma separated list of apps that should run iff the VPN is connected.
 """
 
 from time import sleep
