@@ -12,15 +12,14 @@ Options:
   --apps=<apps> Comma separated list of apps that should run iff the VPN is connected.
 """
 import sys
+import logging
+import logging.config
 
 from time import sleep
 from subprocess import check_output
 
 from appscript import app
 from docopt import docopt
-
-import logging
-import logging.config
 
 DEBUG_FORMAT = "%(asctime)s: %(message)s"
 LOG_CONFIG = {
