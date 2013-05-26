@@ -39,8 +39,13 @@ class VpnMonitor(object):
         self.quit_apps()
 
         if self.is_wifi_connected():
-          sleep(30)
           self.vpn().connect()
+
+          while not self.is_vpn_connected():
+            sys.stdout.write('.')
+            sys.stdout.flush()
+            sleep(0.5)
+          print ''
       else:
         self.run_apps()
       
