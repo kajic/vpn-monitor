@@ -28,7 +28,6 @@ class VpnMonitor(object):
       self.main_loop()
     except KeyboardInterrupt:
       self.quit_apps()
-      raise
     except:
       self.quit_apps()
       raise
