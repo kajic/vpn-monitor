@@ -11,12 +11,33 @@ Options:
   --vpn=<vpn>   Name of VPN.
   --apps=<apps> Comma separated list of apps that should run iff the VPN is connected.
 """
+import sys
 
 from time import sleep
 from subprocess import check_output
 
 from appscript import app
 from docopt import docopt
+
+import logging
+import logging.config
+
+DEBUG_FORMAT = "%(asctime)s: %(message)s"
+LOG_CONFIG = {
+  'version': 1,
+  'formatters': {
+    'debug': { 'format':DEBUG_FORMAT },
+  },
+  'handlers': {
+    'console': {
+      'class': 'logging.StreamHandler',
+      'formatter': 'debug',
+      'level': logging.DEBUG,
+    },
+  },
+  'root': { 'handlers': ('console', ), 'level': 'DEBUG' }
+}
+logging.config.dictConfig(LOG_CONFIG)
 
 class VpnMonitor(object):
   def __init__(self, vpn_name, app_names):
@@ -36,9 +57,11 @@ class VpnMonitor(object):
     while True:
       if not self.is_vpn_connected():
 
+        logging.info("VPN %s is disconnected", self.vpn_name)
         self.quit_apps()
 
         if self.is_wifi_connected():
+          logging.info("Connecting to VPN %s ...", self.vpn_name)
           self.vpn().connect()
 
           while not self.is_vpn_connected():
@@ -46,6 +69,8 @@ class VpnMonitor(object):
             sys.stdout.flush()
             sleep(0.5)
           print ''
+
+          logging.info("Connected to VPN %s", self.vpn_name)
       else:
         self.run_apps()
       
@@ -63,11 +88,13 @@ class VpnMonitor(object):
   def quit_apps(self):
     for name, cur in self.apps:
       if cur.isrunning():
+        logging.info("Quiting app %s", name)
         cur.quit()
 
   def run_apps(self):
     for name, cur in self.apps:
       if not cur.isrunning():
+        logging.info("Starting app %s", name)
         cur.run()
       
 if __name__ == '__main__':
