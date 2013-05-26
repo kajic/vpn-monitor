@@ -1,3 +1,18 @@
+"""vpn-monitor 0.1
+
+Usage:
+  vpn-monitor.py --vpn <vpn> --apps <apps>
+  vpn-monitor.py (-h | --help)
+  vpn-monitor.py --version
+
+Options:
+  -h --help     Show this screen.
+  --version     Show version.
+  --vpn=<vpn>   Name of vpn
+  --apps=<apps> Name of apps that may run iff the vpn is running.
+"""
+from docopt import docopt
+
 from time import sleep
 from subprocess import check_output
 
@@ -20,7 +35,7 @@ class VpnMonitor(object):
 
   def main_loop(self):
     while True:
-      vpn = app('System Events').network_preferences.services[VPN]
+      vpn = app('System Events').network_preferences.services[self.vpn]
       vpn_connected = vpn.current_configuration.connected()
 
       if not vpn_connected:
@@ -49,8 +64,8 @@ class VpnMonitor(object):
       if not cur.isrunning():
         cur.run()
       
-VPN = 'IPredator'
-APPS = ['Transmission', 'uTorrent']
+if __name__ == '__main__':
+    arguments = docopt(__doc__, version='vpn-monitor 0.1')
 
-vpn_monitor = VpnMonitor(VPN, APPS)
-vpn_monitor.run()
+    vpn_monitor = VpnMonitor(arguments['--vpn'], arguments['--apps'].split(','))
+    vpn_monitor.run()
