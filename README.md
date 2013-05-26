@@ -1,4 +1,4 @@
-Monitor your vpn connection and run/quit a set of applications based on the vpn status.
+Monitor your vpn connection on OSX, and run/quit a set of applications based on the vpn status.
 
 Install requirements
 --------------------
