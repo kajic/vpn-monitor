@@ -10,6 +10,16 @@ pip install -r requirements.txt
 Usage
 -----
 
-```bash
-python vpn-monitor.py --vpn IPredator --apps uTorrent,Transmission
+```
+Usage:
+  vpn-monitor.py --vpn=VPN [--app=APP, --app=APP, ...] [(-q | --quiet)]
+  vpn-monitor.py (-h | --help)
+  vpn-monitor.py --version
+
+Options:
+  --vpn=VPN             Name of VPN.
+  --app=APP             Name of APP that should run iff the VPN is connected.
+  -h --help             Show this screen.
+  -v --version          Show version.
+  -q --quiet            Quiet mode.
 ```
