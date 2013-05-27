@@ -10,7 +10,7 @@ Options:
   --app=APP             Name of APP that should run iff the VPN is connected.
   -h --help             Show this screen.
   -v --version          Show version.
-  -q --quiet            Quiet mode [default=False].
+  -q --quiet            Quiet mode.
 """
 import sys
 import logging
