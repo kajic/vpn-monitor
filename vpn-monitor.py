@@ -21,23 +21,6 @@ from subprocess import check_output
 from appscript import app
 from docopt import docopt
 
-DEBUG_FORMAT = "%(asctime)s: %(message)s"
-LOG_CONFIG = {
-  'version': 1,
-  'formatters': {
-    'debug': { 'format':DEBUG_FORMAT },
-  },
-  'handlers': {
-    'console': {
-      'class': 'logging.StreamHandler',
-      'formatter': 'debug',
-      'level': logging.DEBUG,
-    },
-  },
-  'root': { 'handlers': ('console', ), 'level': 'DEBUG' }
-}
-logging.config.dictConfig(LOG_CONFIG)
-
 class VpnMonitor(object):
   def __init__(self, vpn_name, app_names):
     self.vpn_name = vpn_name
@@ -94,7 +77,25 @@ class VpnMonitor(object):
       if not cur.isrunning():
         logging.info("Starting app %s", name)
         cur.run()
-      
+
+# Configure logging
+DEBUG_FORMAT = "%(asctime)s: %(message)s"
+LOG_CONFIG = {
+  'version': 1,
+  'formatters': {
+    'debug': { 'format':DEBUG_FORMAT },
+  },
+  'handlers': {
+    'console': {
+      'class': 'logging.StreamHandler',
+      'formatter': 'debug',
+      'level': logging.DEBUG,
+    },
+  },
+  'root': { 'handlers': ('console', ), 'level': 'DEBUG' }
+}
+logging.config.dictConfig(LOG_CONFIG)
+
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='vpn-monitor 0.1')
 
