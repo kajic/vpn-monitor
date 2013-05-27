@@ -1,7 +1,7 @@
 """vpn-monitor 0.1
 
 Usage:
-  vpn-monitor.py --vpn=VPN [--app=APP, ...] [--quiet]
+  vpn-monitor.py --vpn=VPN [--app=APP, --app=APP, ...] [(-q | --quiet)]
   vpn-monitor.py (-h | --help)
   vpn-monitor.py --version
 
