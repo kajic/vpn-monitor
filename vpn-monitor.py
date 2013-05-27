@@ -1,15 +1,16 @@
 """vpn-monitor 0.1
 
 Usage:
-  vpn-monitor.py --vpn <vpn> --apps <apps>
+  vpn-monitor.py --vpn=VPN [--app=APP, ...] [--quiet]
   vpn-monitor.py (-h | --help)
   vpn-monitor.py --version
 
 Options:
-  -h --help     Show this screen.
-  --version     Show version.
-  --vpn=<vpn>   Name of VPN.
-  --apps=<apps> Comma separated list of apps that should run iff the VPN is connected.
+  --vpn=VPN             Name of VPN.
+  --app=APP             Name of APP that should run iff the VPN is connected.
+  -h --help             Show this screen.
+  -v --version          Show version.
+  -q --quiet            Quiet mode [default=False].
 """
 import sys
 import logging
@@ -98,6 +99,8 @@ logging.config.dictConfig(LOG_CONFIG)
 
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='vpn-monitor 0.1')
+    if arguments['--quiet']:
+      logging.disable(logging.INFO)
 
-    vpn_monitor = VpnMonitor(arguments['--vpn'], arguments['--apps'].split(','))
+    vpn_monitor = VpnMonitor(arguments['--vpn'], arguments['--app'])
     vpn_monitor.run()
