@@ -50,10 +50,10 @@ class VpnMonitor(object):
           self.vpn().connect()
 
           while not self.is_vpn_connected():
-            sys.stdout.write('.')
+            sys.stdout.write(".")
             sys.stdout.flush()
             sleep(0.5)
-          print ''
+          print ""
 
           logging.info("Connected to VPN %s", self.vpn_name)
       else:
@@ -85,24 +85,24 @@ class VpnMonitor(object):
 # Configure logging
 DEBUG_FORMAT = "%(asctime)s: %(message)s"
 LOG_CONFIG = {
-  'version': 1,
-  'formatters': {
-    'debug': { 'format':DEBUG_FORMAT },
+  "version": 1,
+  "formatters": {
+    "debug": {"format": DEBUG_FORMAT},
   },
-  'handlers': {
-    'console': {
-      'class': 'logging.StreamHandler',
-      'formatter': 'debug',
-      'level': logging.DEBUG,
+  "handlers": {
+    "console": {
+      "class": "logging.StreamHandler",
+      "formatter": "debug",
+      "level": logging.DEBUG,
     },
   },
-  'root': { 'handlers': ('console', ), 'level': 'DEBUG' }
+  "root": {"handlers": ("console", ), "level": "DEBUG"}
 }
 logging.config.dictConfig(LOG_CONFIG)
 
-if __name__ == '__main__':
-    arguments = docopt(__doc__, version='vpn-monitor 0.1')
-    if arguments['--quiet']:
+if __name__ == "__main__":
+    arguments = docopt(__doc__, version="vpn-monitor 0.11")
+    if arguments["--quiet"]:
       logging.disable(logging.INFO)
 
     vpn_monitor = VpnMonitor(arguments["--vpn"], arguments["--wifi"], arguments["--app"])
