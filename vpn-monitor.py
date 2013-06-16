@@ -62,7 +62,14 @@ class VpnMonitor(object):
       sleep(0.1)
 
   def vpn(self):
-    return app('System Events').network_preferences.services[self.vpn_name]
+    system_events = app("System Events")
+    if not system_events.isrunning():
+      logging.info("System Events app is not running")
+      self.quit_apps()
+      logging.info("Launching System Events app")
+      system_events.launch()
+    
+    return system_events.network_preferences.services[self.vpn_name]
 
   def is_vpn_connected(self):
     return self.vpn().current_configuration.connected()
