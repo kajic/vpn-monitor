@@ -1,16 +1,17 @@
 """vpn-monitor 0.1
 
 Usage:
-  vpn-monitor.py --vpn=VPN [--app=APP, --app=APP, ...] [(-q | --quiet)]
+  vpn-monitor.py --vpn=VPN --wifi=WIFI [--app=APP, --app=APP, ...] [(-q | --quiet)]
   vpn-monitor.py (-h | --help)
   vpn-monitor.py --version
 
 Options:
-  --vpn=VPN             Name of VPN.
-  --app=APP             Name of APP that should run iff the VPN is connected.
-  -h --help             Show this screen.
-  -v --version          Show version.
-  -q --quiet            Quiet mode.
+  --vpn=VPN             Name of VPN
+  --wifi=WIFI           Name of Wifi interface.
+  --app=APP             Name of APP that should run iff the VPN is connected
+  -h --help             Show this screen
+  -v --version          Show version
+  -q --quiet            Quiet mode
 """
 import sys
 import logging
@@ -23,9 +24,10 @@ from appscript import app
 from docopt import docopt
 
 class VpnMonitor(object):
-  def __init__(self, vpn_name, app_names):
+  def __init__(self, vpn_name, wifi_interface, app_names):
     self.vpn_name = vpn_name
     self.apps = [(name, app(name)) for name in app_names]
+    self.wifi_interface = wifi_interface
 
   def run(self):
     try:
@@ -65,7 +67,7 @@ class VpnMonitor(object):
     return self.vpn().current_configuration.connected()
 
   def is_wifi_connected(self):
-    return 'Wi-Fi Power (en1): On' in check_output(['networksetup', '-getairportpower', 'en1'])
+    return ("Wi-Fi Power (%s): On" % self.wifi_interface) in check_output(["networksetup", "-getairportpower", self.wifi_interface])
 
   def quit_apps(self):
     for name, cur in self.apps:
@@ -102,5 +104,5 @@ if __name__ == '__main__':
     if arguments['--quiet']:
       logging.disable(logging.INFO)
 
-    vpn_monitor = VpnMonitor(arguments['--vpn'], arguments['--app'])
+    vpn_monitor = VpnMonitor(arguments["--vpn"], arguments["--wifi"], arguments["--app"])
     vpn_monitor.run()
