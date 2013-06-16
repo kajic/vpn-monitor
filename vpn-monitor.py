@@ -80,7 +80,7 @@ class VpnMonitor(object):
       cur = app(name)
       if not cur.isrunning():
         logging.info("Starting app %s", name)
-        cur.run()
+        cur.launch()
 
 # Configure logging
 DEBUG_FORMAT = "%(asctime)s: %(message)s"
