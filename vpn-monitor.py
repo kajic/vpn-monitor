@@ -14,6 +14,7 @@ Options:
   -q --quiet            Quiet mode
 """
 import sys
+import subprocess
 import logging
 import logging.config
 
@@ -72,8 +73,8 @@ class VpnMonitor(object):
   def quit_apps(self):
     for name, cur in self.apps:
       if cur.isrunning():
-        logging.info("Quiting app %s", name)
-        cur.quit()
+      logging.info("Quiting app %s", name)
+      subprocess.call(["killall", "-9", name])
 
   def run_apps(self):
     for name, cur in self.apps:
