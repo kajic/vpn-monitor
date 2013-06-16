@@ -27,8 +27,8 @@ from docopt import docopt
 class VpnMonitor(object):
   def __init__(self, vpn_name, wifi_interface, app_names):
     self.vpn_name = vpn_name
-    self.apps = [(name, app(name)) for name in app_names]
     self.wifi_interface = wifi_interface
+    self.app_names = app_names
 
   def run(self):
     try:
@@ -71,13 +71,13 @@ class VpnMonitor(object):
     return ("Wi-Fi Power (%s): On" % self.wifi_interface) in check_output(["networksetup", "-getairportpower", self.wifi_interface])
 
   def quit_apps(self):
-    for name, cur in self.apps:
-      if cur.isrunning():
+    for name in self.app_names:
       logging.info("Quiting app %s", name)
       subprocess.call(["killall", "-9", name])
 
   def run_apps(self):
-    for name, cur in self.apps:
+    for name in self.app_names:
+      cur = app(name)
       if not cur.isrunning():
         logging.info("Starting app %s", name)
         cur.run()
