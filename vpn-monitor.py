@@ -24,6 +24,16 @@ from subprocess import check_output
 from appscript import app
 from docopt import docopt
 
+def AppRunner(application, unless_running=None, log_message=None):
+  if not application.isrunning():
+    if unless_running:
+      unless_running()
+    if log_message:
+      logging.info(log_message)
+    application.run()
+
+  return application
+
 class VpnMonitor(object):
   def __init__(self, vpn_name, wifi_interface, app_names):
     self.vpn_name = vpn_name
@@ -61,18 +71,19 @@ class VpnMonitor(object):
       
       sleep(0.1)
 
-  def vpn(self):
-    system_events = app("System Events")
-    if not system_events.isrunning():
-      logging.info("System Events app is not running")
-      self.quit_apps()
-      logging.info("Launching System Events app")
-      system_events.launch()
+  def vpn(self): 
+    system_events = AppRunner(app("System Events"))
+    network_preferences = AppRunner(system_events.network_preferences, self.quit_apps)
+    services = AppRunner(network_preferences.services, self.quit_apps)
+    vpn = AppRunner(services[self.vpn_name], self.quit_apps)
     
-    return system_events.network_preferences.services[self.vpn_name]
+    return vpn
 
   def is_vpn_connected(self):
-    return self.vpn().current_configuration.connected()
+    vpn = self.vpn()
+    current_configuration = AppRunner(vpn.current_configuration, self.quit_apps)
+
+    return current_configuration.connected()
 
   def is_wifi_connected(self):
     return ("Wi-Fi Power (%s): On" % self.wifi_interface) in check_output(["networksetup", "-getairportpower", self.wifi_interface])
@@ -84,10 +95,7 @@ class VpnMonitor(object):
 
   def run_apps(self):
     for name in self.app_names:
-      cur = app(name)
-      if not cur.isrunning():
-        logging.info("Starting app %s", name)
-        cur.launch()
+      cur = AppRunner(app(name), None, "Starting app %s" % name)
 
 # Configure logging
 DEBUG_FORMAT = "%(asctime)s: %(message)s"
